@@ -361,7 +361,7 @@ export function RecipesTab({
             <label className="mt-3 block">
               <span className={staffLabelClass}>Ukupno g / porcija</span>
               <span className="mt-1 block text-xs text-[var(--text-secondary)]">
-                Masa cele porcije jela u gramima – koristi se za obračun "g/porc" u pripremi.
+                Masa cele porcije jela u gramima – koristi se za obračun &quot;g/porc&quot; u pripremi.
               </span>
               <input
                 className={staffInputClass + " mt-2 w-40 text-right"}

@@ -2,7 +2,7 @@ import { count, eq, sql } from "drizzle-orm";
 import { ensureBackendEnabled } from "@/server/api/guard";
 import { jsonError, jsonOk, requireRole } from "@/server/auth/session";
 import { getDb } from "@/server/db";
-import { dailyMenuSlotDishes, dishes, mealReservations } from "@/server/db/schema";
+import { dailyMenuSlotDishes, dishCategoryEnum, dishes, mealReservations } from "@/server/db/schema";
 
 export async function GET(request: Request) {
   const disabled = ensureBackendEnabled();
@@ -30,7 +30,7 @@ export async function GET(request: Request) {
       .leftJoin(dailyMenuSlotDishes, eq(dishes.id, dailyMenuSlotDishes.dishId));
 
     if (categoryFilter) {
-      circulationQuery.where(eq(dishes.category, categoryFilter as any));
+      circulationQuery.where(eq(dishes.category, categoryFilter as (typeof dishCategoryEnum.enumValues)[number]));
     }
 
     const circulation = await circulationQuery
