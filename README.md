@@ -86,7 +86,7 @@ src/
 ### 1. Kloniraj i instaliraj
 
 ```bash
-git clone <repo-url> eMenza
+git clone https://github.com/Aleksandar145/eMenza.git
 cd eMenza
 npm install
 ```
