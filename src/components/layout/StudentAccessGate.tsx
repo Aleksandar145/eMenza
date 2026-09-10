@@ -15,20 +15,25 @@ export function StudentAccessGate({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
   const clerkEnabled = isClerkEnabledClient();
-  const { isSignedIn, isLoaded: clerkLoaded } = useAuth();
+  const { isLoaded: clerkLoaded } = useAuth();
   const {
     isSessionValidated,
     isAuthenticated,
     isDemo,
+    isLoggingOut,
     session,
     sessionStatus,
     onboardingPending,
+    usesBackend,
   } = useStudentSessionContext();
 
   useLayoutEffect(() => {
-    if (!isSessionValidated || isDemo) {
+    if (!isSessionValidated || isDemo || !usesBackend || isLoggingOut) {
       return;
     }
+
+    const isProtectedGuestPath =
+      !isAuthenticated && isStudentProtectedPath(pathname) && !isStudentAuthPath(pathname);
 
     const korak =
       typeof window !== "undefined"
@@ -53,6 +58,18 @@ export function StudentAccessGate({ children }: { children: ReactNode }) {
       return;
     }
 
+    if (isProtectedGuestPath) {
+      if (sessionStatus === "guest" || sessionStatus === "error") {
+        router.replace(`/login?next=${encodeURIComponent(pathname)}`);
+        return;
+      }
+
+      if (sessionStatus === "oauth_pending") {
+        router.replace(getRegisterVerifyHref());
+        return;
+      }
+    }
+
     if (!clerkEnabled || !clerkLoaded) {
       return;
     }
@@ -71,30 +88,19 @@ export function StudentAccessGate({ children }: { children: ReactNode }) {
       );
       return;
     }
-
-    if (!isSignedIn || isAuthenticated) {
-      return;
-    }
-
-    if (sessionStatus !== "oauth_pending") {
-      return;
-    }
-
-    if (isStudentProtectedPath(pathname) && !isStudentAuthPath(pathname)) {
-      router.replace(getRegisterVerifyHref());
-    }
   }, [
     clerkEnabled,
     clerkLoaded,
     isAuthenticated,
     isDemo,
+    isLoggingOut,
     isSessionValidated,
-    isSignedIn,
     onboardingPending,
     pathname,
     router,
     session?.userId,
     sessionStatus,
+    usesBackend,
   ]);
 
   return children;

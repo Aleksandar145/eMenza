@@ -21,10 +21,8 @@ import { useUserSettings } from "@/hooks/useUserSettings";
 import { useTodayDateKey } from "@/contexts/AppTimeProvider";
 import { getSsrAlignDateKey } from "@/lib/date-utils";
 import { isClientBackendEnabled } from "@/lib/backend-config";
-import { isClerkEnabledClient } from "@/lib/clerk-config";
 import { getSuggestedObrokForDay } from "@/lib/dashboard-mock";
 import { syncPublishedMenuFromApi } from "@/lib/kuhinja-jelovnik-store";
-import { useAuth } from "@clerk/nextjs";
 
 export function Dashboard() {
   const mounted = useClientMounted();
@@ -43,9 +41,6 @@ export function Dashboard() {
 
   const { sessionStatus, session, isSessionValidated, isAuthenticated, isDemo } =
     useStudentSession();
-  const clerkEnabled = isClerkEnabledClient();
-  const { isSignedIn, isLoaded: clerkLoaded } = useAuth();
-  const hasClerkSession = clerkEnabled && clerkLoaded && isSignedIn;
 
   useEffect(() => {
     if (!isClientBackendEnabled() || !isAuthenticated || isDemo || !isSessionValidated) {
@@ -58,7 +53,7 @@ export function Dashboard() {
   const { settings } = useUserSettings();
   const showPageSkeleton =
     !mounted ||
-    (sessionStatus === "loading" && !session && !isSessionValidated && !hasClerkSession);
+    (sessionStatus === "loading" && !session && !isSessionValidated);
   const { showPosnoMeals } = usePosnoHighlight(
     todayDateKey,
     settings.profile.religion,
