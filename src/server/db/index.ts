@@ -18,7 +18,7 @@ export function getDb() {
   }
 
   if (!globalForDb.emenzaDb) {
-    const maxConnections = process.env.NODE_ENV === "production" ? 10 : 10;
+    const maxConnections = process.env.NODE_ENV === "production" ? 3 : 10;
     const client = postgres(getDatabaseUrl(), {
       prepare: false,
       max: maxConnections,

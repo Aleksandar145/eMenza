@@ -6,6 +6,18 @@
 
 ---
 
+## 🚀 Live Demo
+
+**https://emenza.vercel.app** — deployed on Vercel (managed Supabase + Clerk).
+
+| Role | URL | Login |
+|---|---|---|
+| Student | `/register` | Google OAuth (or demo account) |
+| Referent | `/referent/login` | `referent@emenza.rs` / `referent123` |
+| Admin | `/admin/login` | `admin@emenza.rs` / `admin123` |
+
+---
+
 ## Features
 
 ### 🎓 Student Portal
